@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block start %}
+
+<!-- Blog Header Section -->
+<section class="blog-header d-flex align-items-center text-white text-center"
+    style="margin: 0; padding: 0; height: 40vh; position: relative; display: flex; justify-content: center; align-items: center;
+    background: linear-gradient(135deg,rgb(1, 7, 19),rgb(1, 5, 10));">
+    <div class="container">
+        <h1 class="fw-bold text-glow">{{ blog_obj.title }}</h1>
+        <p class="lead">
+            By <strong>{{ blog_obj.user.username }}</strong> | 
+            {{ blog_obj.created_at }} | 
+            {{ blog_obj.content|wordcount|divisibleby:80 }} min read
+        </p>
+    </div>
+</section>
+
+<!-- Blog Content Section -->
+<section class="blog-content py-4" style="background-color: #f8f9fa;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <!-- Blog Image (Fixed Extra Space) -->
+                <div class="blog-image text-center mt-3">
+                    <img class="img-fluid rounded shadow-lg" src="/media/{{ blog_obj.image }}" 
+                        alt="{{ blog_obj.title }}" style="max-height: 400px; width: auto; object-fit: cover;">
+                </div>
+
+                <!-- Blog Text Content -->
+                <div class="blog-text mt-4 p-4 rounded-4 shadow-sm bg-white">
+                    {{ blog_obj.content|safe }}
+                </div>
+
+                <!-- Like & Dislike Buttons -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-success mx-2"><i class="fas fa-thumbs-up"></i> Like ({{ blog_obj.likes }})</button>
+                    <button class="btn btn-outline-danger mx-2"><i class="fas fa-thumbs-down"></i> Dislike ({{ blog_obj.dislikes }})</button>
+                </div>
+
+                <!-- Social Media Share -->
+                <div class="text-center mt-4">
+                    <p class="fw-bold">Share this blog:</p>
+                    <a href="https://wa.me/?text={{ request.build_absolute_uri }}" class="btn btn-success mx-1">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" class="btn btn-primary mx-1">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </a>
+                    <a href="https://www.linkedin.com/shareArticle?url={{ request.build_absolute_uri }}" class="btn btn-info mx-1">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                </div>
+
+                <!-- Related Blogs Section -->
+                <div class="related-blogs mt-5">
+                    <h3 class="text-center fw-bold">Related Posts</h3>
+                    <div class="row">
+                        {% for related_blog in related_blogs %}
+                            <div class="col-md-4">
+                                <div class="card shadow-sm">
+                                    <img src="/media/{{ related_blog.image }}" class="card-img-top" alt="{{ related_blog.title }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ related_blog.title }}</h5>
+                                        <a href="{% url 'blog_detail' related_blog.id %}" class="btn btn-sm btn-primary">Read More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Comment Section -->
+                <div class="comments mt-5">
+                    <h3 class="fw-bold">Comments</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <textarea class="form-control mt-3" name="comment" rows="4" placeholder="Write your comment..."></textarea>
+                        <button type="submit" class="btn btn-primary mt-3">Post Comment</button>
+                    </form>
+                    <div class="mt-4">
+                        {% for comment in blog_obj.comments.all %}
+                            <div class="comment p-3 my-2 border rounded bg-white">
+                                <strong>{{ comment.user.username }}</strong> 
+                                <span class="text-muted">({{ comment.created_at }})</span>
+                                <p>{{ comment.content }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Back to Blogs Button -->
+                <div class="text-center mt-5">
+                    <a href="{% url 'see_blog' %}" class="btn btn-gradient px-5 py-2 fw-bold shadow-sm">Back to Blogs</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

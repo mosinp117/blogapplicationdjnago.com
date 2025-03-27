@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block start %}
+
+<section class="mt-5 pt-5">
+    <div class="container">
+        
+        <h2 class="text-center fw-bold mb-4">Search Blogs</h2>
+
+        <!-- Search Bar -->
+        <div class="mb-4">
+            <input type="text" id="blogSearch" class="form-control" placeholder="Search for a blog...">
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered shadow-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" class="text-center">No</th>
+                        <th scope="col">Blog Title</th>
+                        <th scope="col">Created At</th>
+                        <th scope="col" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="blogTable">
+                    {% for blog in blog_objs %}
+                    <tr>
+                        <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                        <td class="fw-bold">{{ blog.title }}</td>
+                        <td>
+                            <span class="badge bg-primary">{{ blog.created_at|date:"M d, Y" }}</span>
+                        </td>
+                        <td class="text-center">
+                            <a href="{% url 'blog_update' blog.slug %}" class="btn btn-sm btn-success">
+                                <i class="fas fa-edit"></i> Update
+                            </a>
+                            <a href="{% url 'blog_delete' blog.id %}" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- JavaScript for Search Functionality -->
+<script>
+    document.getElementById('blogSearch').addEventListener('keyup', function () {
+        let searchText = this.value.toLowerCase();
+        let rows = document.querySelectorAll('#blogTable tr');
+
+        rows.forEach(row => {
+            let title = row.cells[1].textContent.toLowerCase();
+            row.style.display = title.includes(searchText) ? '' : 'none';
+        });
+    });
+</script>
+
+{% endblock %}

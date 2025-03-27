@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block start %}
+<div class="container d-flex flex-column align-items-center mt-5">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-glow">Create a Masterpiece</h2>
+        <p class="text-muted">Unleash your creativity and share your story.</p>
+    </div>
+
+    <!-- Glassmorphic Blog Form -->
+    <div class="blog-form p-4 rounded-4 shadow-lg">
+        <form method="post" enctype="multipart/form-data" action="{% url 'add_blog' %}">
+            {% csrf_token %}
+            
+            <!-- Title Input -->
+            <div class="mb-3">
+                <label class="fw-bold text-light">Blog Title</label>
+                <input type="text" class="form-control glass-input" placeholder="Enter your blog title" name="title" required>
+            </div>
+
+            <!-- Blog Content -->
+            <div class="mb-3">
+                {{ form.media }}
+                {{ form.as_p }}
+            </div>
+
+            <!-- Image Upload -->
+            <div class="mb-3">
+                <label class="fw-bold text-light">Upload Cover Image</label>
+                <input type="file" name="image" class="form-control glass-input" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-gradient px-5 py-2 fw-bold shadow-sm">Publish Blog</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- View Blogs Button -->
+    <div class="mt-4">
+        <a href="{% url 'see_blog' %}" class="btn btn-outline-light fw-bold shadow-sm px-4">View Your Blogs</a>
+    </div>
+</div>
+
+<!-- Custom Styles -->
+<style>
+/* Glassmorphism Background */
+body {
+    background: linear-gradient(135deg, #1c1c1c, #242424);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Glowing Text */
+.text-glow {
+    font-size: 2rem;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 15px rgba(255, 65, 108, 0.5);
+}
+
+/* Glassmorphic Form */
+.blog-form {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    transition: transform 0.3s ease-in-out;
+}
+.blog-form:hover {
+    transform: translateY(-5px);
+}
+
+/* Glassmorphic Input Fields */
+.glass-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    color: white;
+    transition: 0.3s ease-in-out;
+}
+.glass-input:focus {
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Gradient Button */
+.btn-gradient {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    border: none;
+    color: white;
+    transition: 0.3s ease-in-out;
+}
+.btn-gradient:hover {
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    transform: scale(1.05);
+}
+
+/* Outline Button */
+.btn-outline-light {
+    border: 2px solid white;
+    color: white;
+    transition: 0.3s ease-in-out;
+}
+.btn-outline-light:hover {
+    background: white;
+    color: black;
+}
+</style>
+
+{% endblock %}

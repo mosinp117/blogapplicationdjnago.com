@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block start %}
+<!-- Hero Section -->
+<section class="hero-section text-white text-center d-flex align-items-center" style="background: url('https://wallpaperaccess.com/full/1595920.jpg') center/cover no-repeat; height: 70vh;">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Stories That Inspire, Voices That Matter.</h1>
+        <p class="lead">Your words can shape ideas and change perspectives.</p>
+        <a href="http://127.0.0.1:8000/see-blog/" class="btn btn-outline-light btn-lg mt-3">See And Update Blogs </a>
+    </div>
+</section>
+
+<!-- Blog Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            {% for blog in blogs %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card blog-card border-0 shadow-sm">
+                    <a href="{% url 'blog_detail' blog.slug %}" class="position-relative">
+                        <img class="card-img-top rounded" src="/media/{{blog.image}}" alt="{{ blog.title }}">
+                        <div class="overlay d-flex align-items-center justify-content-center">
+                            <h6 class="text-white">Read More</h6>
+                        </div>
+                    </a>
+                    <div class="card-body">
+                        <small class="text-muted">By {{ blog.user.username }} | {{ blog.created_at|date:"M d, Y" }}</small>
+                        <h5 class="mt-2">
+                            <a class="text-dark text-decoration-none" href="{% url 'blog_detail' blog.slug %}">{{ blog.title }}</a>
+                        </h5>
+                        <p class="text-muted small">{{ blog.summary|truncatewords:15 }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="#">&laquo; See Olders</a></li>
+                <li class="page-item"><a class="page-link" href="http://127.0.0.1:8000/add-blog/">Create NewOne &raquo;</a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+<style>
+/* Hero Section */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-blend-mode: darken;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Blog Cards */
+.blog-card {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    border-radius: 10px;
+}
+.blog-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Overlay Effect */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+.blog-card:hover .overlay {
+    opacity: 1;
+}
+</style>
+
+{% endblock %}
